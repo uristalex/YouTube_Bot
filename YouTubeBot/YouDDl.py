@@ -5,7 +5,7 @@ from yt_dlp import YoutubeDL
 
 
 LIMIT_VID_SIZE: float = 100
-TOTAL_VID_SIZE: float = 0
+total_vid_size: float = 0
 
 
 def split_name(title_n: str) -> str:
@@ -42,12 +42,12 @@ def chek_size_total()-> None:
     Функция контроля размера загруженных файлов
     :return:
     """
-    global TOTAL_VID_SIZE
-    if TOTAL_VID_SIZE == 0:
-        TOTAL_VID_SIZE = folder_size('videos')
-    if TOTAL_VID_SIZE > LIMIT_VID_SIZE:
+    global total_vid_size
+    if total_vid_size == 0:
+        total_vid_size = folder_size('videos')
+    if total_vid_size > LIMIT_VID_SIZE:
         delete_everything_in_folder('videos')
-        TOTAL_VID_SIZE = 0
+        total_vid_size = 0
         print('deleted')
 
 
@@ -77,7 +77,7 @@ def download_vid(url: str) -> str:
     :param url: ссылка на видео
     :return: Строка с именем файла для дальнейшей обработки в боте.
     """
-    global TOTAL_VID_SIZE
+    global total_vid_size
     flag: str = ''
     ydl_opts = dict(quiet=True, format='mp4', no_warnings=True)
     chek_size_total()
@@ -91,7 +91,7 @@ def download_vid(url: str) -> str:
         else:
             ydl_opts['outtmpl']['default'] = f'videos/{split_name(info["title"])}.mp4'
             ydl.download([url])
-            TOTAL_VID_SIZE += size_info
+            total_vid_size += size_info
             print(f"{ydl_opts['outtmpl']['default']} size {size_info}")
             flag = ydl_opts['outtmpl']['default']
     except Exception as err:

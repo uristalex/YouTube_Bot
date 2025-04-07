@@ -5,8 +5,11 @@ from config import TOKEN
 from YouDDl import download_vid, download_serv
 
 bot_p = telebot.TeleBot(TOKEN)
-start_text = 'Тебя  приветствует бот для загрузки YouTube SHOTS. Для загрузки вставь ссылку на видео или поделись ею в бот из приложения YouTube'
+start_text = ('Тебя  приветствует бот для загрузки YouTube SHOTS.'
+              ' Для загрузки вставь ссылку на видео или поделись '
+              'ею в бот из приложения YouTube')
 CHAT_BY_DATETIME = dict()
+
 
 @bot_p.message_handler(commands=['start'])
 def start_mess(message):
@@ -16,7 +19,8 @@ def start_mess(message):
 
 @bot_p.message_handler(commands=['error'])
 def error_mes(message):
-    error_text = ('YouTube имеет возможность ограничивать использования своего контента на других платформах'
+    error_text = ('YouTube имеет возможность ограничивать использования '
+                  'своего контента на других платформах'
                   'в связи с чем отдельные ролики не могут быть скачаны.')
     bot_p.send_message(message.chat.id, error_text)
 
@@ -36,8 +40,6 @@ def help_bot(message):
     bot_p.send_message(message.chat.id, bot_donate)
 
 
-
-
 # @bot_p.message_handler(content_types=['text'])
 def ganre_repl(message):
     if message.text.startswith('s'):
@@ -47,7 +49,8 @@ def ganre_repl(message):
         # bot_p.delete_message(message.chat.id, message.message_id)
         try:
             bot_p.send_message(message.chat.id,
-                               f'Перед загрузкой проверим какого размера файл видео и нет ли ограничений {len(CHAT_BY_DATETIME)}')
+                               f'Перед загрузкой проверим какого размера файл видео '
+                               f'и нет ли ограничений {len(CHAT_BY_DATETIME)}')
             s = download_vid(message.text)
             if s == 'big':
                 bot_p.send_message(message.chat.id, 'Размер файла превышает 50 MB')
@@ -56,13 +59,12 @@ def ganre_repl(message):
             else:
                 with open(s, 'rb') as file:
                     f = file.read()
-                bot_p.send_document(message.chat.id, document=f, visible_file_name=s, caption=f'Предоставленно: https://t.me/YouShots_BOT')
+                bot_p.send_document(message.chat.id, document=f, visible_file_name=s,
+                                    caption=f'Предоставленно: https://t.me/YouShots_BOT')
                 return True
-
         except:
             print('ERROR')
             bot_p.send_message(message.chat.id, 'Извините что-то пошло не так. Попробуйте другое видео :(')
-
     else:
         bot_p.send_message(message.chat.id, 'Вставьте корректную ссылку')
 
@@ -84,7 +86,6 @@ def on_request(message: telebot.types.Message):
         else:
             CHAT_BY_DATETIME[message.chat.id] = current_time
             ganre_repl(message)
-
     if text:
         bot_p.send_message(message.chat.id, text)
 
