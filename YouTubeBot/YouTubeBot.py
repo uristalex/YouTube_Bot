@@ -11,6 +11,7 @@ start_text = ('Тебя  приветствует бот для загрузки
 CHAT_BY_DATETIME = dict()
 
 
+
 @bot_p.message_handler(commands=['start'])
 def start_mess(message):
     # bot_p.delete_message(message.chat.id, ) func to delet message
