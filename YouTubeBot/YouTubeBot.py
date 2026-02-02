@@ -10,12 +10,16 @@ start_text = ('Тебя  приветствует бот для загрузки
               ' Для загрузки вставь ссылку на видео или поделись '
               'ею в бот из приложения YouTube')
 CHAT_BY_DATETIME = dict()
+NIC_BY_CHAT = list()
+
 
 
 @bot_p.message_handler(commands=['start'])
 def start_mess(message):
     # bot_p.delete_message(message.chat.id, ) func to delet message
     bot_p.send_message(message.chat.id, f'{start_text}')
+    NIC_BY_CHAT.append(message.from_user.id)
+    
 
 
 @bot_p.message_handler(commands=['error'])
