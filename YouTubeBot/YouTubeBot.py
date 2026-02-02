@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import datetime as DT
 import telebot
 from config import TOKEN

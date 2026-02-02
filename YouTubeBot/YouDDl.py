@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import os
 import shutil
 from pathlib import Path
@@ -14,7 +15,7 @@ def split_name(title_n: str) -> str:
     :param title_n: Строка для преобразования
     :return: Строка преобразованная функцией
     """
-    return ''.join([i for i in title_n if i not in '\/:*?"<>#|@.,;' ])
+    return ''.join([i for i in title_n if i not in '/:*?"<>#|@.,;' ])
 
 
 def folder_size(path: str)-> float:
@@ -58,7 +59,7 @@ def download_serv(url: str) -> str:
     :return: информация о результате работы функции
     """
     flag: str = ''
-    ydl_opts = dict(quiet=True, format='mp4', no_warnings=True)
+    ydl_opts = dict(quiet=True, format='mp4', no_warnings=True, cookiefile='yout_cookies.txt')
     try:
         with YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
@@ -79,12 +80,13 @@ def download_vid(url: str) -> str:
     """
     global total_vid_size
     flag: str = ''
-    ydl_opts = dict(quiet=True, format='mp4', no_warnings=True)
+    ydl_opts = dict(quiet=True, format='mp4', no_warnings=True, cookiefile='yout_cookies.txt')
     chek_size_total()
     try:
         with YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
-        size_info = round((info['filesize_approx'] / 1024) / 1024, 2)
+        # size_info = round((info['filesize_approx'] / 1024) / 1024, 2)
+        size_info = 40
         if size_info > 49:
             print(f'Fail to Big: {size_info}')
             flag = f'big'
@@ -96,6 +98,6 @@ def download_vid(url: str) -> str:
             flag = ydl_opts['outtmpl']['default']
     except Exception as err:
         print(err)
-        flag = 'Er'
+        flag = ('Er', err, [i['format_id'] for i in info['formats']])
     print(total_vid_size)
     return flag
